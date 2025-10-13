@@ -39,10 +39,11 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'rest_framework_simplejwt.token_blacklist',
-    'core',
     'users',
     'students',
-    'courses',
+    'teachers',
+    'classes',
+    'subjects',
 ]
 
 MIDDLEWARE = [
@@ -165,3 +166,5 @@ SIMPLE_JWT = {
 
 # Dev email console backend (change for prod)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+AUTH_USER_MODEL = 'users.User'
