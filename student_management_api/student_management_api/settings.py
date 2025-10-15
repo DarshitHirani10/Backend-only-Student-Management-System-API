@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-load_dotenv()  # take environment variables from .env.
+load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG')
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(",") if os.getenv('ALLOWED_HOSTS') else ["*"]
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
-    'drf_yasg',
+    # 'drf_yasg',
     'rest_framework_simplejwt.token_blacklist',
     'users',
     'students',
