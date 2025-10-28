@@ -9,6 +9,7 @@ from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, Ou
 from rest_framework_simplejwt.exceptions import TokenError
 from users.serializers import UserRegistrationSerializer, UserProfileSerializer
 from users.models import ActiveSession
+from datetime import timedelta
 
 User = get_user_model()
 
@@ -46,9 +47,15 @@ class LoginView(APIView):
         if not username or not password:
             return Response({'error': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
         try:
+            now = timezone.now()
+            expired_sessions = ActiveSession.objects.filter(expires_at__lt=now, active=True)
+            for s in expired_sessions:
+                s.active = False
+                s.save()
             active_any = ActiveSession.objects.filter(active=True).first()
             if active_any:
-                return Response({'error': 'Another user is already logged in. Please wait until they logout.'}, status=status.HTTP_403_FORBIDDEN)
+                return Response({'error': 'Another user is already logged in. Please wait until they logout.'},
+                                status=status.HTTP_403_FORBIDDEN)
             user = authenticate(username=username, password=password)
             if not user:
                 return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -88,7 +95,6 @@ class LogoutView(APIView):
                         BlacklistedToken.objects.get_or_create(token=token_obj)
             except Exception:
                 pass
-            
             session.active = False
             session.save()
             return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)

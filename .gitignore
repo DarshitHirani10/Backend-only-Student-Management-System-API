@@ -1,4 +1,21 @@
 /.venvstudent
 .env
-*__pycache__/
+
+# Python bytecode files and cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.pyc
+**/__pycache__/
+**/*.pyc
+
+# Django
 migrations/
+**/migrations/
+**/*.py[cod]
+
+# VS Code
+.vscode/
+*.code-workspace
